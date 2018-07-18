@@ -1,0 +1,513 @@
+---
+swagger: "2.0"
+info:
+  description: "Community Matrimony System applicaiton. Responsible for the management\
+    \ and integration with client application/services for end-users\n"
+  version: "1.0.14"
+  title: "Community Matrimony System"
+  contact:
+    name: "CMS Development"
+    email: "aniketd.khaire@gmail.com"
+host: "localhost:8001"
+basePath: "/apis/v1"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+- "text/plain"
+paths:
+  /favorites/{profilePk}:
+    get:
+      tags:
+      - "favorites"
+      description: "Retrieves all profiles from the Community Marriage Service (CMS)\
+        \ which were marked as favorites by the provided ProfilePk\n"
+      operationId: "cmsGetFavorites"
+      parameters:
+      - name: "profilePk"
+        in: "path"
+        description: "Profile Pk From DB"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful query of service"
+          schema:
+            type: "array"
+            description: "Fetches all favorite profiles of the ProfilePk provided\
+              \ above"
+            title: "Favorite Profile Detials"
+            items:
+              $ref: "#/definitions/FavoriteData"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profiles are found that match the requested\
+            \ criteria"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Favorites"
+    post:
+      tags:
+      - "favorites"
+      description: "Adds favorite for specific profile settings in the CMS provisioned\
+        \ account."
+      operationId: "cmsAddFavorite"
+      parameters:
+      - name: "profilePk"
+        in: "path"
+        description: "Profile Pk from DB"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "favoriteData"
+        description: "Favorite Data to be created."
+        required: true
+        schema:
+          $ref: "#/definitions/FavoriteData"
+      responses:
+        200:
+          description: "Added to favorites successfully"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profile is found"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Favorites"
+    delete:
+      tags:
+      - "favorites"
+      description: "Performs a permanent removal of the Favorite Profile from the\
+        \ favorite list.\n"
+      operationId: "cmsRemoveFavorite"
+      parameters:
+      - name: "profilePk"
+        in: "path"
+        description: "Profile Pk From DB"
+        required: true
+        type: "string"
+      - in: "query"
+        name: "favoriteProfilePk"
+        description: "The profile Pk which was added as favorite"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Removed CMS favorite successfully"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profile  is found"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Favorites"
+  /profile:
+    get:
+      tags:
+      - "profile"
+      description: "Retrieves all profiles from the Community Marriage Service (CMS)"
+      operationId: "cmsAllProfiles"
+      parameters: []
+      responses:
+        200:
+          description: "Successful query of service"
+          schema:
+            type: "array"
+            description: "Fetches all all profiles from the Community Marriage Service\
+              \ (CMS)"
+            title: "Profile Detials"
+            items:
+              $ref: "#/definitions/ProfileData"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profiles are found that match the requested\
+            \ criteria"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Profile"
+    post:
+      tags:
+      - "profile"
+      description: "Creates an account for the Community Marriage Service \n"
+      operationId: "cmsProfileCreate"
+      parameters:
+      - in: "body"
+        name: "profileData"
+        description: "Information about the profile"
+        required: true
+        schema:
+          $ref: "#/definitions/ProfileData"
+      responses:
+        200:
+          description: "Successful creation of profile"
+        400:
+          description: "Bad Request - Check the input parameters"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Profile"
+  /profile/{profilePk}:
+    get:
+      tags:
+      - "profile"
+      description: "Retrieves a profile for the Community Marriage Service (CMS) for\
+        \ the given ProfilePk\n"
+      operationId: "cmsProfileInfo"
+      parameters:
+      - name: "profilePk"
+        in: "path"
+        description: "Profile Pk From DB"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful query of service"
+          schema:
+            type: "array"
+            description: "Fetches all details of the ProfilePk provided above"
+            title: "Profile Detials"
+            items:
+              $ref: "#/definitions/ProfileData"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profiles are found that match the requested\
+            \ criteria"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Profile"
+    delete:
+      tags:
+      - "profile"
+      description: "Performs a permanent removal of the CMS Profile and Associated\
+        \ parameters.\n"
+      operationId: "cmsProfileDelete"
+      parameters:
+      - name: "profilePk"
+        in: "path"
+        description: "Profile Pk From DB"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Removed CMS account successfully"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profile  is found"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Profile"
+    patch:
+      tags:
+      - "profile"
+      description: "Updates specific profile settings for the CMS provisioned account.\n"
+      operationId: "cmsProfileUpdate"
+      parameters:
+      - name: "profilePk"
+        in: "path"
+        description: "Profile Pk from DB"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "updateInfo"
+        description: "Fields to update the CMS account with"
+        required: true
+        schema:
+          $ref: "#/definitions/ProfileData"
+      responses:
+        200:
+          description: "Updated CMS Profile Info"
+          schema:
+            type: "object"
+            description: "Updated CMS profile information"
+            title: "CMS Profile Information"
+            properties: {}
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profile is found"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Profile"
+  /user/login:
+    post:
+      tags:
+      - "user"
+      description: "Checks whether the provided credentials are valid or not and returns response code accordingly \n"
+      operationId: "cmsLogin"
+      parameters:
+      - in: "query"
+        name: "username"
+        description: "The username for the login"
+        required: true
+        type: string
+      - in: "query"
+        name: "password"
+        description: "The password for the login"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Successful validation of credentials"
+        400:
+          description: "Invalid username/password provided"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "User"
+  /user:
+    post:
+      tags:
+      - "user"
+      description: "Creates an account for the Community Marriage Service \n"
+      operationId: "cmsUserCreate"
+      parameters:
+      - in: "body"
+        name: "userData"
+        description: "Basic information about the user. The status of the user will\
+          \ be set to 'UNPAID' by default, if not provided."
+        required: true
+        schema:
+          $ref: "#/definitions/UserData"
+      responses:
+        200:
+          description: "Successful creation of user"
+        400:
+          description: "Bad Request - Check the input parameters"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "User"
+  /user/profile/{userPk}:
+    get:
+      tags:
+      - "profile"
+      description: "Retrieves all profiles for the Community Marriage Service (CMS)\
+        \ for the given UserPk\n"
+      operationId: "cmsGetProfileByUser"
+      parameters:
+      - name: "userPk"
+        in: "path"
+        description: "User Pk From DB"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful query of service"
+          schema:
+            type: "array"
+            description: "Fetches all details of the Profile, for the UserPk provided\
+              \ above"
+            title: "Profile Detials"
+            items:
+              $ref: "#/definitions/ProfileData"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profiles are found that match the requested\
+            \ criteria"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Profile"
+    delete:
+      tags:
+      - "profile"
+      description: "Performs a permanent removal of all CMS Profiles and Associated\
+        \ parameters for the UserPk provided\n"
+      operationId: "cmsDeleteProfilesForUser"
+      parameters:
+      - name: "userPk"
+        in: "path"
+        description: "User Pk From DB"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Removed CMS account successfully"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no profile  is found"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "Profile"
+  /user/{userPk}:
+    get:
+      tags:
+      - "user"
+      description: "Retrieves a user for the Community Marriage Service (CMS) for\
+        \ the given UserPk\n"
+      operationId: "cmsUserInfo"
+      parameters:
+      - name: "userPk"
+        in: "path"
+        description: "User Pk From DB"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful query of service"
+          schema:
+            description: "Fetches all details of the UserPk provided above"
+            title: "User Detials"
+            $ref: "#/definitions/UserData"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no users are found that match the requested\
+            \ criteria"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "User"
+    delete:
+      tags:
+      - "user"
+      description: "Performs a permanent removal of the CMS User and Associated parameters.\n"
+      operationId: "cmsUserDelete"
+      parameters:
+      - name: "userPk"
+        in: "path"
+        description: "User Pk From DB"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Removed CMS account successfully"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no user  is found"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "User"
+    patch:
+      tags:
+      - "user"
+      description: "Updates specific user settings for the CMS provisioned account.\n"
+      operationId: "cmsUserUpdate"
+      parameters:
+      - name: "userPk"
+        in: "path"
+        description: "User Pk from DB"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "updateInfo"
+        description: "Fields to update the CMS account with"
+        required: true
+        schema:
+          $ref: "#/definitions/UserData"
+      responses:
+        200:
+          description: "Updated CMS User Info"
+          schema:
+            description: "Updated CMS user information"
+            title: "CMS User Information"
+            $ref: "#/definitions/UserData"
+        400:
+          description: "Bad Request - Check the input parameters"
+        404:
+          description: "Not Found - If no user is found"
+        500:
+          description: "Internal server error. Please check logs for more details."
+      x-swagger-router-controller: "User"
+definitions:
+  ProfileData:
+    properties:
+      pk:
+        type: "string"
+      userPk:
+        type: "string"
+      name:
+        type: "string"
+      fathersName:
+        type: "string"
+      dob:
+        type: "string"
+        format: "date"
+      height:
+        type: "integer"
+      weight:
+        type: "integer"
+      currentRecidence:
+        type: "string"
+      nativePlace:
+        type: "string"
+      education:
+        type: "string"
+      occupation:
+        type: "string"
+      income:
+        type: "string"
+      sex:
+        type: "string"
+      picture:
+        type: "string"
+      relatives:
+        type: "string"
+      created:
+        type: "string"
+        format: "date"
+    example:
+      income: "income"
+      education: "education"
+      occupation: "occupation"
+      fathersName: "fathersName"
+      currentRecidence: "currentRecidence"
+      created: "2000-01-23"
+      sex: "sex"
+      weight: 1
+      relatives: "relatives"
+      userPk: "userPk"
+      picture: "picture"
+      dob: "2000-01-23"
+      name: "name"
+      nativePlace: "nativePlace"
+      pk: 0
+      height: 6
+  FavoriteData:
+    properties:
+      pk:
+        type: "string"
+      userProfilePk:
+        type: "string"
+      favoriteProfilePk:
+        type: "string"
+      created:
+        type: "string"
+        format: "date"
+    description: "CMS Favorite Data"
+    example:
+      favoritePk: 1
+      created: "2000-01-23"
+      pk: 0
+      userPk: 6
+  UserData:
+    properties:
+      pk:
+        type: "string"
+      name:
+        type: "string"
+      phone:
+        type: "string"
+      password:
+        type: "string"
+      status:
+        type: "string"
+      created:
+        type: "string"
+        format: "date"
+      updated:
+        type: "string"
+        format: "date"
+    description: "CMS User Description"
+    example:
+      password: "password"
+      phone: "phone"
+      created: "2000-01-23"
+      name: "name"
+      pk: 0
+      updated: "2000-01-23"
+      status: "status"

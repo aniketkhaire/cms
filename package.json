@@ -1,0 +1,23 @@
+{
+  "name": "community-matrimony-system",
+  "version": "1.0.14",
+  "description": "Community Matrimony System applicaiton. Responsible for the management and integration with client application/services for end-users ",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "mysql": "^2.15.0",
+    "cors": "^2.8.4",
+    "swagger-tools": "0.10.1",
+    "express": "^4.16.3"
+  }
+}
